@@ -23,5 +23,9 @@ new Vue({
   // 注册路由 注册路=路由信息，组件身上都会有 $route 和 $router 属性
   router,
   // 引入仓库，组件身上都会有 $store 属性
-  store
+  store,
+  // 全局事件总线$bus配置
+  beforeCreate(){
+    Vue.prototype.$bus = this; // this == vm
+  }
 }).$mount('#app')

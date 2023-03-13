@@ -55,6 +55,7 @@ export default {
       keyword:'',
     }
   },
+
   methods: {
     // 搜索按钮回调函数，需要向Search路由进行跳转
     goSearch(){
@@ -89,6 +90,12 @@ export default {
         this.$router.push(location);
       }
     }
+  },
+  mounted() {
+    // 通过全局事件总线清除关键字
+    this.$bus.$on('clear',()=>{
+      this.keyword = ''
+    })
   },
 };
 </script>

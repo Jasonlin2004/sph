@@ -11,15 +11,17 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <!-- 分类面包屑 -->
+            <li class="with-x" v-if="searchParams.categoryName"> {{ searchParams.categoryName }}<i @click="removeCategoryName">×</i></li>
+            <!-- 关键字面包屑 -->
+            <li class="with-x" v-if="searchParams.keyword"> {{ searchParams.keyword }}<i @click="removeKeyword">×</i> </li>
+            <!-- 品牌面包屑 -->
+            <li class="with-x" v-if="searchParams.trademark"> {{ searchParams.trademark.split(':')[1] }}<i @click="removeTradeMark">×</i> </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector @trademarkInfo="trademarkInfo" />
 
         <!--details 销售产品列表-->
         <div class="details clearfix">
@@ -100,8 +102,8 @@
                 <li class="prev disabled">
                   <a href="#">«上一页</a>
                 </li>
-                <li v-for="(page,index) in pageSize" :key="index">
-                  <a href="#">{{page}}</a>
+                <li v-for="(page, index) in pageSize" :key="index">
+                  <a href="#">{{ page }}</a>
                 </li>
                 <li class="dotted"><span>...</span></li>
                 <li class="next">
@@ -118,7 +120,7 @@
 </template>
 
 <script>
-import { mapGetters,mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import SearchSelector from "./SearchSelector/SearchSelector";
 export default {
   name: "Search",
@@ -156,7 +158,7 @@ export default {
 
   // 当组件挂载完毕之前会执行一次【比mounted先】
   beforeMount() {
-    Object.assign(this.searchParams,this.$route.query,this.$route.params);
+    Object.assign(this.searchParams, this.$route.query, this.$route.params);
   },
 
   // 组件挂载完只执行一次
@@ -168,8 +170,8 @@ export default {
     // mapGetters写法：传递数组，因为里面没有分模块
     ...mapGetters(["goodList"]),
     ...mapState({
-      pageSize:state=>state.search.searchList.pageSize
-    })
+      pageSize: (state) => state.search.searchList.pageSize,
+    }),
   },
 
   methods: {
@@ -177,6 +179,50 @@ export default {
     getData() {
       this.$store.dispatch("getSearchList", this.searchParams);
     },
+    // 删除分类名字
+    removeCategoryName() {
+      // 把带给服务器的数据变空，还需要发请求
+      // 带给服务器的参数说明可有可无，如果属性值为空的字符串还是会被相应的字段带给服务器
+      // 把相应的字段变成undefined，这个字段不会带给服务器
+      this.searchParams.categoryName = undefined;
+      this.searchParams.category1Id = undefined;
+      this.searchParams.category2Id = undefined;
+      this.searchParams.category3Id = undefined;
+      this.getData();
+      // 地址栏也需要修改
+      // 本意删除query，但如果路径中出现params不应该删除，路由跳转时带着
+      if (this.$route.params) {
+        this.$router.push({ name: "search", params: this.$route.params });
+      }
+    },
+    // 删除分类名字
+    removeKeyword() {
+      // 给服务器带的参数searchParams的keyword置空
+      this.searchParams.keyword = undefined;
+      // 再次发请求
+      this.getData();
+      // 通知兄弟组件Header清除关键字
+      this.$bus.$emit("chear");
+      // 进行路由的跳转
+      if (this.$route.query) {
+        this.$router.push({ name: "search", query: this.$route.query });
+      }
+    },
+    // 自定义事件回调
+    trademarkInfo(trademark) {
+      // console.log(trademark);
+      // 1、整理品牌字段参数 ID：品牌名称
+      this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`;
+      // 2、再次发请求获取数据
+      this.getData();
+    },
+    // 删除品牌信息
+    removeTradeMark(){
+      // 给服务器带的参数searchParams的trademark置空
+      this.searchParams.trademark = undefined;
+      // 再次发请求
+      this.getData();
+    }
   },
 };
 </script>

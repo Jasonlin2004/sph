@@ -3,8 +3,9 @@
     <div class="type-wrap logo">
       <div class="fl key brand">品牌</div>
       <div class="value logos">
+        <!-- 品牌的地方 -->
         <ul class="logo-list">
-          <li v-for="(trademark,index) in trademarkList" :key="trademark.tmId">{{trademark.tmName}}</li>
+          <li v-for="(trademark,index) in trademarkList" :key="trademark.tmId" @click="tradeMarkHandler(trademark)">{{trademark.tmName}}</li>
         </ul>
       </div>
       <div class="ext">
@@ -12,7 +13,7 @@
         <a href="javascript:void(0);">更多</a>
       </div>
     </div>
-    <div class="type-wrap" v-for="(attr,index) in attrsList" :key="attr.attr.Id"> 
+    <div class="type-wrap" v-for="(attr,index) in attrsList" :key="attr.Id"> 
       <div class="fl key">{{attr.attrName}}</div>
       <div class="fl value">
         <ul class="type-list">
@@ -33,6 +34,16 @@
 
     computed: {
       ...mapGetters(['trademarkList','attrsList'])
+    },
+
+    methods: {
+      // 品牌事件处理函数
+      tradeMarkHandler(trademark){
+        // 点击品牌，还是需要整理参数，向服务器发请求获取相应的数据进行展示
+        // 在父组件发请求，因为父组件中的searchParams参数是发给服务器的，子组件把点击的品牌信息给父组件传过去(自定义事件)
+        // console.log(trademark);
+        this.$emit('trademarkInfo',trademark);
+      }
     },
   }
 </script>
