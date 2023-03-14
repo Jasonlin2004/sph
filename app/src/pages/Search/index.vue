@@ -17,11 +17,13 @@
             <li class="with-x" v-if="searchParams.keyword"> {{ searchParams.keyword }}<i @click="removeKeyword">×</i> </li>
             <!-- 品牌面包屑 -->
             <li class="with-x" v-if="searchParams.trademark"> {{ searchParams.trademark.split(':')[1] }}<i @click="removeTradeMark">×</i> </li>
+            <!-- 平台售卖属性值展示 -->
+            <li class="with-x" v-for="(attrValue,index) in searchParams.props" :key="index"> {{ attrValue.split(':')[1] }}<i @click="removeAttr(index)">×</i> </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector @trademarkInfo="trademarkInfo" />
+        <SearchSelector @trademarkInfo="trademarkInfo" @attrInfo="attrInfo"/>
 
         <!--details 销售产品列表-->
         <div class="details clearfix">
@@ -221,6 +223,22 @@ export default {
       // 给服务器带的参数searchParams的trademark置空
       this.searchParams.trademark = undefined;
       // 再次发请求
+      this.getData(
+
+      );
+    },
+    // 收集平台属性地方的回调
+    attrInfo(attr,attrValue){
+      let props = `${attr.attrId}:${attrValue}:${attr.attrName}`;
+      // 数组去重
+      if(this.searchParams.props.indexOf(props)==-1) this.searchParams.props.push(props);
+      // 再次发请求
+      this.getData(); 
+    },
+    // 删除售卖属性
+    removeAttr(index){
+      // 再次整理参数，需要再发请求
+      this.searchParams.props.splice(index,1);
       this.getData();
     }
   },
