@@ -12,41 +12,45 @@
           </ul>
           <ul class="fl sui-tag">
             <!-- 分类面包屑 -->
-            <li class="with-x" v-if="searchParams.categoryName"> {{ searchParams.categoryName }}<i @click="removeCategoryName">×</i></li>
+            <li class="with-x" v-if="searchParams.categoryName">
+              {{ searchParams.categoryName
+              }}<i @click="removeCategoryName">×</i>
+            </li>
             <!-- 关键字面包屑 -->
-            <li class="with-x" v-if="searchParams.keyword"> {{ searchParams.keyword }}<i @click="removeKeyword">×</i> </li>
+            <li class="with-x" v-if="searchParams.keyword">
+              {{ searchParams.keyword }}<i @click="removeKeyword">×</i>
+            </li>
             <!-- 品牌面包屑 -->
-            <li class="with-x" v-if="searchParams.trademark"> {{ searchParams.trademark.split(':')[1] }}<i @click="removeTradeMark">×</i> </li>
+            <li class="with-x" v-if="searchParams.trademark">
+              {{ searchParams.trademark.split(":")[1]
+              }}<i @click="removeTradeMark">×</i>
+            </li>
             <!-- 平台售卖属性值展示 -->
-            <li class="with-x" v-for="(attrValue,index) in searchParams.props" :key="index"> {{ attrValue.split(':')[1] }}<i @click="removeAttr(index)">×</i> </li>
+            <li
+              class="with-x"
+              v-for="(attrValue, index) in searchParams.props"
+              :key="index"
+            >
+              {{ attrValue.split(":")[1] }}<i @click="removeAttr(index)">×</i>
+            </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector @trademarkInfo="trademarkInfo" @attrInfo="attrInfo"/>
+        <SearchSelector @trademarkInfo="trademarkInfo" @attrInfo="attrInfo" />
 
         <!--details 销售产品列表-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
+              <!-- 排序结构 -->
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{ active: isOne }">
+                  <a>综合<span v-show="isOne">↑、↓</span></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li></li>
+                <li :class="{ active: isTwo }">
+                  <a>价格<span v-show="isTwo">↑、↓</span></a>
                 </li>
               </ul>
             </div>
@@ -144,8 +148,8 @@ export default {
         categoryName: "",
         // 关键字
         keyword: "",
-        // 排序
-        order: "1:desc",
+        // 排序（初始状态应是综合降序）
+        order: "2:desc",
         // 分页器用的：代表当前第几页
         pageNo: 1,
         // 代表的是每一个展示的数据个数
@@ -174,6 +178,12 @@ export default {
     ...mapState({
       pageSize: (state) => state.search.searchList.pageSize,
     }),
+    isOne() {
+      return this.searchParams.order.indexOf("1") != -1;
+    },
+    isTwo() {
+      return this.searchParams.order.indexOf("2") != -1;
+    },
   },
 
   methods: {
@@ -219,26 +229,25 @@ export default {
       this.getData();
     },
     // 删除品牌信息
-    removeTradeMark(){
+    removeTradeMark() {
       // 给服务器带的参数searchParams的trademark置空
       this.searchParams.trademark = undefined;
       // 再次发请求
-      this.getData(
-
-      );
+      this.getData();
     },
     // 收集平台属性地方的回调
-    attrInfo(attr,attrValue){
+    attrInfo(attr, attrValue) {
       let props = `${attr.attrId}:${attrValue}:${attr.attrName}`;
       // 数组去重
-      if(this.searchParams.props.indexOf(props)==-1) this.searchParams.props.push(props);
+      if (this.searchParams.props.indexOf(props) == -1)
+        this.searchParams.props.push(props);
       // 再次发请求
-      this.getData(); 
+      this.getData();
     },
     // 删除售卖属性
-    removeAttr(index){
+    removeAttr(index) {
       // 再次整理参数，需要再发请求
-      this.searchParams.props.splice(index,1);
+      this.searchParams.props.splice(index, 1);
       this.getData();
     }
   },
