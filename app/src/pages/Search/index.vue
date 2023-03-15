@@ -26,11 +26,15 @@
               }}<i @click="removeTradeMark">×</i>
             </li>
             <!-- 平台售卖属性值展示 -->
+<<<<<<< HEAD
             <li
               class="with-x"
               v-for="(attrValue, index) in searchParams.props"
               :key="index"
             >
+=======
+            <li class="with-x" v-for="(attrValue, index) in searchParams.props" :key="index">
+>>>>>>> 1aa59ce (2023.3.15(综合价格排序和分页器))
               {{ attrValue.split(":")[1] }}<i @click="removeAttr(index)">×</i>
             </li>
           </ul>
@@ -45,12 +49,21 @@
             <div class="navbar-inner filter">
               <!-- 排序结构 -->
               <ul class="sui-nav">
+<<<<<<< HEAD
                 <li :class="{ active: isOne }">
                   <a>综合<span v-show="isOne">↑、↓</span></a>
                 </li>
                 <li></li>
                 <li :class="{ active: isTwo }">
                   <a>价格<span v-show="isTwo">↑、↓</span></a>
+=======
+                <li :class="{ active: isOne }" @click="changeOrder('1')">
+                  <a>综合<span v-show="isOne">{{ isDesc ? '↓' : '↑' }}</span></a>
+                </li>
+                <li></li>
+                <li :class="{ active: isTwo }" @click="changeOrder('2')">
+                  <a>价格<span v-show="isTwo">{{ isDesc ? '↓' : '↑' }}</span></a>
+>>>>>>> 1aa59ce (2023.3.15(综合价格排序和分页器))
                 </li>
               </ul>
             </div>
@@ -58,16 +71,10 @@
           <div class="goods-list">
             <!-- 价格结构 -->
             <ul class="yui3-g">
-              <li
-                class="yui3-u-1-5"
-                v-for="(good, index) in goodList"
-                :key="good.id"
-              >
+              <li class="yui3-u-1-5" v-for="(good, index) in goodList" :key="good.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
-                      ><img :src="good.defaultImg"
-                    /></a>
+                    <a href="item.html" target="_blank"><img :src="good.defaultImg" /></a>
                   </div>
                   <div class="price">
                     <strong>
@@ -76,50 +83,24 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a
-                      target="_blank"
-                      href="item.html"
-                      title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                      >{{ good.title }}</a
-                    >
+                    <a target="_blank" href="item.html" title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】">{{ good.title
+                    }}</a>
                   </div>
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
                   </div>
                   <div class="operate">
-                    <a
-                      href="success-cart.html"
-                      target="_blank"
-                      class="sui-btn btn-bordered btn-danger"
-                      >加入购物车</a
-                    >
-                    <a href="javascript:void(0);" class="sui-btn btn-bordered"
-                      >收藏</a
-                    >
+                    <a href="success-cart.html" target="_blank" class="sui-btn btn-bordered btn-danger">加入购物车</a>
+                    <a href="javascript:void(0);" class="sui-btn btn-bordered">收藏</a>
                   </div>
                 </div>
               </li>
             </ul>
-          </div>
-          <!-- 分页器 -->
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li v-for="(page, index) in pageSize" :key="index">
-                  <a href="#">{{ page }}</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
+            
           </div>
         </div>
+        <!-- 分页器 -->
+        <Pagination />
       </div>
     </div>
   </div>
@@ -149,7 +130,11 @@ export default {
         // 关键字
         keyword: "",
         // 排序（初始状态应是综合降序）
+<<<<<<< HEAD
         order: "2:desc",
+=======
+        order: "1:desc",
+>>>>>>> 1aa59ce (2023.3.15(综合价格排序和分页器))
         // 分页器用的：代表当前第几页
         pageNo: 1,
         // 代表的是每一个展示的数据个数
@@ -184,6 +169,13 @@ export default {
     isTwo() {
       return this.searchParams.order.indexOf("2") != -1;
     },
+<<<<<<< HEAD
+=======
+    isDesc() {
+      if (this.searchParams.order.split(":")[1] == 'desc') return true
+      else return false
+    }
+>>>>>>> 1aa59ce (2023.3.15(综合价格排序和分页器))
   },
 
   methods: {
@@ -249,6 +241,27 @@ export default {
       // 再次整理参数，需要再发请求
       this.searchParams.props.splice(index, 1);
       this.getData();
+<<<<<<< HEAD
+=======
+    },
+    // 排序的操作
+    changeOrder(flag) {
+      // flag形参，是一个标记，代表用户点击的是综合(1)价格(2) 用户点击时进来的
+      // 获取最开始的状态
+      let originFlag = this.searchParams.order.split(':')[0];
+      let originSort = this.searchParams.order.split(':')[1];
+      let newOrder = '';
+      // 这个语句能确定点击是综合
+      if (flag == originFlag) {
+        newOrder = `${originFlag}:${originSort == 'desc' ? 'asc' : 'desc'}`;
+      } else {
+        // 点击的是价格
+        newOrder = `${flag}:${'desc'}`;
+      }
+      // 将新的order赋予给searchParams，再次发请求
+      this.searchParams.order = newOrder;
+      this.getData();
+>>>>>>> 1aa59ce (2023.3.15(综合价格排序和分页器))
     }
   },
 };
