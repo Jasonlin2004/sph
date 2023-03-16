@@ -21,7 +21,8 @@
 <script>
 export default {
   name: "Pagination",
-}
+  
+};
 </script>
 
 <style lang="less" scoped>

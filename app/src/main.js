@@ -3,11 +3,11 @@ import App from './App.vue';
 // 三级联动组件---全局组件
 import TypeNav from '@/components/TypeNav';
 import Carousel from '@/components/Carousel';
-import Pagination from '@/components/Pagination';
+import Pagination from '@/components/Pagination'
 
 Vue.component(TypeNav.name,TypeNav); // 参数一：组件名字；参数二：哪一个组件
 Vue.component(Carousel.name,Carousel);
-Vue.component(Pagination.name,Pagination);
+Vue.component(Pagination.name,Pagination)
 // 引入路由
 import router from '@/router';
 // 引入仓库
