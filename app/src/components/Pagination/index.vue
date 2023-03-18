@@ -1,33 +1,66 @@
 <template>
   <div class="pagination">
+    <h1>{{ startNumAndEndNum }}----当前第{{ pageNo }}</h1>
     <button>上一页</button>
-    <button>1</button>
-    <button>···</button>
+    <button v-if="startNumAndEndNum.start > 1">1</button>
+    <button v-if="startNumAndEndNum.start > 2">...</button>
 
-    <button>3</button>
-    <button>4</button>
-    <button>5</button>
-    <button>6</button>
-    <button>7</button>
+    <!-- 中间部分 -->
+    <button v-for="(page, index) in startNumAndEndNum.end" :key="index" v-if="page >= startNumAndEndNum.start">{{ page }}</button>
 
-    <button>···</button>
-    <button>9</button>
+    <button v-if="startNumAndEndNum.end < totalPage-1">...</button>
+    <button v-if="startNumAndEndNum.end < totalPage">{{ totalPage }}</button>
     <button>下一页</button>
 
-    <button style="margin-left: 30px">共 60 条</button>
+    <button style="margin-left: 30px">共 {{ total }} 条</button>
   </div>
 </template>
 
 <script>
 export default {
   name: "Pagination",
-  
+  props: ['pageNo', 'pageSize', 'total', 'continues'],
+  computed: {
+    // 总共多少页
+    totalPage() {
+      return Math.ceil(this.total / this.pageSize)
+    },
+
+    // 计算出连续页码的起始数字和结束数字[连续页码数字：至少是5]
+    startNumAndEndNum() {
+      const { continues, totalPage, pageNo } = this;
+      // 先定义两个变量，存储起始数字与结束数字
+      let start = 0, end = 0;
+      // 连续页码数5【至少5页起步】：如果出现不正常现象【不足5页】
+      // 不正常现象【总页数没有连续页码多】
+      if (continues > totalPage) {
+        start = 1;
+        end = totalPage;
+      } else {
+        // 正常现象【连续页码5，总页数一定大于5】
+        start = pageNo - parseInt(continues / 2);
+        end = pageNo + parseInt(continues / 2);
+        // 把不正常现象【start出现小于等于0】纠正
+        if (start < 1) {
+          start = 1;
+          end = continues;
+        }
+        // 把不正常现象【end出现大于总页码】纠正
+        if (end > totalPage) {
+          end = totalPage;
+          start = totalPage - continues + 1;
+        }
+      }
+      return { start, end }
+    }
+  }
 };
 </script>
 
 <style lang="less" scoped>
 .pagination {
   text-align: center;
+
   button {
     margin: 0 5px;
     background-color: #f4f4f5;
