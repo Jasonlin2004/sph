@@ -27,11 +27,7 @@
               <i @click="removeTradeMark">×</i>
             </li>
             <!-- 平台售卖属性值展示 -->
-            <li
-              class="with-x"
-              v-for="(attrValue, index) in searchParams.props"
-              :key="index"
-            >
+            <li class="with-x" v-for="(attrValue, index) in searchParams.props" :key="index">
               {{ attrValue.split(":")[1] }}
               <i @click="removeAttr(index)">×</i>
             </li>
@@ -66,11 +62,7 @@
           <div class="goods-list">
             <!-- 价格结构 -->
             <ul class="yui3-g">
-              <li
-                class="yui3-u-1-5"
-                v-for="(good, index) in goodList"
-                :key="good.id"
-              >
+              <li class="yui3-u-1-5" v-for="(good, index) in goodList" :key="good.id">
                 <div class="list-wrap">
                   <div class="p-img">
                     <a href="item.html" target="_blank">
@@ -84,12 +76,8 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a
-                      target="_blank"
-                      href="item.html"
-                      title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                      >{{ good.title }}</a
-                    >
+                    <a target="_blank" href="item.html" title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】">{{ good.title
+                    }}</a>
                   </div>
                   <div class="commit">
                     <i class="command">
@@ -98,15 +86,8 @@
                     </i>
                   </div>
                   <div class="operate">
-                    <a
-                      href="success-cart.html"
-                      target="_blank"
-                      class="sui-btn btn-bordered btn-danger"
-                      >加入购物车</a
-                    >
-                    <a href="javascript:void(0);" class="sui-btn btn-bordered"
-                      >收藏</a
-                    >
+                    <a href="success-cart.html" target="_blank" class="sui-btn btn-bordered btn-danger">加入购物车</a>
+                    <a href="javascript:void(0);" class="sui-btn btn-bordered">收藏</a>
                   </div>
                 </div>
               </li>
@@ -114,7 +95,8 @@
           </div>
 
           <!-- 分页器 -->
-          <Pagination :pageNo="25" :pageSize="3" :total="91" :continues="5"/>
+          <Pagination :pageNo="searchParams.pageNo" :pageSize="searchParams.pageSize" :total="total"
+            :continues="5" @getPageNo="getPageNo" />
         </div>
       </div>
     </div>
@@ -127,9 +109,7 @@ import SearchSelector from "./SearchSelector/SearchSelector";
 export default {
   name: "Search",
 
-  components: {
-    SearchSelector,
-  },
+  components: { SearchSelector, },
 
   data() {
     return {
@@ -172,7 +152,8 @@ export default {
     // mapGetters写法：传递数组，因为里面没有分模块
     ...mapGetters(["goodList"]),
     ...mapState({
-      pageSize: (state) => state.search.searchList.pageSize,
+      pageSize: state => state.search.searchList.pageSize,
+      total: state => state.search.searchList.total,
     }),
     isOne() {
       return this.searchParams.order.indexOf("1") != -1;
@@ -269,6 +250,11 @@ export default {
       this.searchParams.order = newOrder;
       this.getData();
     },
+    // 自定义事件的回调函数---获取当前第几页
+    getPageNo(pageNo){
+      this.searchParams.pageNo = pageNo; // 整合发给服务器请求
+      this.getData(); // 再次发请求
+    }
   },
 };
 </script>
