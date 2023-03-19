@@ -32,6 +32,7 @@ VueRouter.prototype.replace = function   (location,resolve,reject) {
 // 配置路由
 export default new VueRouter({
   routes,
+  // 滚动行为
   scrollBehavior (to, from, savedPosition) {
     // y: 0滚动条最上方
     return {y:0}

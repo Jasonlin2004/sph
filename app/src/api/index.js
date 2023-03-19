@@ -17,3 +17,7 @@ export const reqGetFloorList = () => mockRequests.get('/floor');
 
 // 获取搜索模块数据 /api/list post 参数：需要带参数（至少一个空对象）
 export const reqGetSearchInfo = (params) => requests({url:'/list',method:'post',data:params})
+
+// 获取产品详情页 /api/item/{ skuId } get 参数：产品id
+export const reqGoodsInfo = (skuId) => requests({url:`/item/${skuId}`, method:'get'})
+
