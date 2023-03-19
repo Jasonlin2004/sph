@@ -65,9 +65,10 @@
               <li class="yui3-u-1-5" v-for="(good, index) in goodList" :key="good.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank">
+                    <!-- 在路由跳转的时候切记别忘带参数id（params） -->
+                    <router-link :to="`/detail/${good.id}`">
                       <img :src="good.defaultImg" />
-                    </a>
+                    </router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -104,12 +105,13 @@
 </template>
 
 <script>
+import { RouterLink } from "vue-router";
 import { mapGetters, mapState } from "vuex";
 import SearchSelector from "./SearchSelector/SearchSelector";
 export default {
   name: "Search",
 
-  components: { SearchSelector, },
+  components: { SearchSelector, RouterLink },
 
   data() {
     return {

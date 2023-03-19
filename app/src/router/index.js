@@ -1,14 +1,10 @@
 // 此文件用于配置路由
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import routes from "./routes";
 // 使用插件
 Vue.use(VueRouter);
 
-// 引入路由组件
-import Home from '@/pages/Home';
-import Login from '@/pages/Login';
-import Register from '@/pages/Register';
-import Search from '@/pages/Search';
 // 先把VueRouter原型对象的push，先保存一份
 // 先把VueRouter原型对象的replace，先保存一份
 const orginPush = VueRouter.prototype.push;
@@ -35,40 +31,9 @@ VueRouter.prototype.replace = function   (location,resolve,reject) {
 
 // 配置路由
 export default new VueRouter({
-  routes:[
-    // 重定向，在项目跑起来的时候，访问/，立马让他定到首页
-    {
-      path:'*',
-      redirect:'/home'
-    },
-    {
-      path:'/home',
-      component:Home,
-      meta:{showFooter:true}
-    },
-    {
-      name:'search',
-      path:'/search/:keyword?',
-      component:Search,
-      meta:{showFooter:true},
-      // 路由组件能不能传递prop参数
-
-      // 布尔值写法：params
-      props:true,
-      // 对象写法：额外给路由传递一些props
-      // props:{a:1,b:2}
-      // 函数写法：可以params、query参数通过props传递给路由组件
-      /* props: $route=>{
-        return {keyword:$route.params.keyword,k:$route.query.k}
-      } */
-    },
-    {
-      path:'/login',
-      component:Login
-    },
-    {
-      path:'/register',
-      component:Register
-    },
-  ]
+  routes,
+  scrollBehavior (to, from, savedPosition) {
+    // y: 0滚动条最上方
+    return {y:0}
+  }
 })
