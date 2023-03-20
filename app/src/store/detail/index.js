@@ -26,8 +26,13 @@ const getters = {
     // 初始状态空对象
     return state.goodInfo.categoryView || {}; 
   },
+  // 产品信息数据
   skuInfo(state){
     return state.goodInfo.skuInfo || {}; 
+  },
+  // 产品售卖属性变化
+  spuSaleAttrList(state){
+    return state.goodInfo.spuSaleAttrList || []; 
   }
 };
 

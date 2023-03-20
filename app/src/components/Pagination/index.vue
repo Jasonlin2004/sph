@@ -6,18 +6,13 @@
     <button v-if="startNumAndEndNum.start > 2">...</button>
 
     <!-- 中间部分 -->
-    <button v-for="(page, index) in startNumAndEndNum.end" :key="index" v-if="page >= startNumAndEndNum.start"
-      @click="$emit('getPageNo', page)" :class="{ active: pageNo == page }">{{ page
-      }}</button>
+    <button v-for="(page, index) in startNumAndEndNum.end" :key="index" v-if="page >= startNumAndEndNum.start" @click="$emit('getPageNo', page)" :class="{ active: pageNo == page }">{{ page }}</button>
 
     <button v-if="startNumAndEndNum.end < totalPage - 1">...</button>
-    <button v-if="startNumAndEndNum.end < totalPage" @click="$emit('getPageNo', totalPage)"
-      :class="{ active: pageNo == totalPage }">
-      {{ totalPage }}
-    </button>
+    <button v-if="startNumAndEndNum.end < totalPage" @click="$emit('getPageNo', totalPage)" :class="{ active: pageNo == totalPage }"> {{ totalPage }} </button>
     <button :disabled="pageNo == totalPage" @click="$emit('getPageNo', pageNo + 1)">下一页</button>
 
-    <!-- <button style="margin-left: 30px">共 {{ total }} 条</button> -->
+    <!-- <button style="margin-left: 30px">共 {{ total }} 条</butnpmton> -->
   </div>
 </template>
 
