@@ -11,6 +11,7 @@ const mutations = {
 };
 
 const actions = {
+  // 获取产品信息的action
   async getGoodInfo({ commit }, skuId) {
     const result = await reqGoodsInfo(skuId);
     if (result.code == 200) {
@@ -19,7 +20,16 @@ const actions = {
   }
 };
 
-const getters = {};
+// 简化数据而生
+const getters = {
+  categoryView(state){
+    // 初始状态空对象
+    return state.goodInfo.categoryView || {}; 
+  },
+  skuInfo(state){
+    return state.goodInfo.skuInfo || {}; 
+  }
+};
 
 export default {
   state,
