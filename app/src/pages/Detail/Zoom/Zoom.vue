@@ -1,11 +1,12 @@
 <template>
   <div class="spec-preview">
-    <img :src="skuImageList[0].imgUrl" />
-    <div class="event"></div>
+    <img :src="skuImageList[currentIndex].imgUrl" />
+    <div class="event" @mousemove="handler"></div>
     <div class="big">
-      <img :src="skuImageList[0].imgUrl" />
+      <img :src="skuImageList[currentIndex].imgUrl" ref="big" />
     </div>
-    <div class="mask"></div>
+    <!-- 蒙版遮罩层 -->
+    <div class="mask" ref="mask"></div>
   </div>
 </template>
 
@@ -13,10 +14,36 @@
   export default {
     name: "Zoom",
     props:['skuImageList'],
+    data(){
+      return {
+        currentIndex:0
+      }
+    },
     mounted(){
-      
+      // 全局事件总线，带兄弟组件传来的索引
+      this.$bus.$on('getIndex',index=>{
+        this.currentIndex = index;
+      })
     },
     
+    methods:{
+      handler(event){
+        let mask = this.$refs.mask;
+        let big = this.$refs.big;
+        let left = event.offsetX - mask.offsetWidth/2;
+        let top = event.offsetY - mask.offsetHeight/2;
+        // 约束范围，如果left和top小于0，则要等于0
+        if(left <= 0) left = 0;
+        if(left >= mask.offsetWidth) left = mask.offsetWidth;
+        if(top <= 0) top = 0;
+        if(top >= mask.offsetHeight) top = mask.offsetHeight;
+        // 修改元素left和top属性值
+        mask.style.left = left + 'px';
+        mask.style.top = top + 'px';
+        big.style.left = -2 * left + 'px';
+        big.style.top = -2 * top + 'px';
+      },
+    }
   }
 </script>
 
