@@ -21,3 +21,5 @@ export const reqGetSearchInfo = (params) => requests({url:'/list',method:'post',
 // 获取产品详情页 /api/item/{ skuId } get 参数：产品id
 export const reqGoodsInfo = (skuId) => requests({url:`/item/${skuId}`, method:'get'})
 
+// 将产品添加到购物车，或更新购物车某个产品的个数 /api/cart/checkCart/{skuID}/{skuNum}
+export const reqAddOrUpdataShopCart = (skuId,skuNum) => requests({url: `/cart/addToCart/${skuId}/${skuNum}`, method:'post'})

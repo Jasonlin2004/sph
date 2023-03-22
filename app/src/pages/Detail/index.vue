@@ -103,12 +103,19 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input autocomplete="off" class="itxt" v-model="skuNum" @change="changeSkuNum"/>
+                <a href="javascript:" class="plus" @click="skuNum++">+</a>
+                <a
+                  href="javascript:"
+                  class="mins"
+                  @click="skuNum > 1 ? skuNum-- : (skuNum = 1)"
+                  >-</a
+                >
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <!-- 这里路由跳转在加入购物车，进行路由之前 发请求
+                  把购买产品的信息通过请求方式通知服务器，服务器进行相应存储 -->
+                <a @click="addShopCart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -353,7 +360,12 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "Detail",
-
+  data() {
+    // 购买产品个数
+    return {
+      skuNum: 1,
+    };
+  },
   components: {
     ImageList,
     Zoom,
@@ -381,7 +393,32 @@ export default {
       // 点击那个售卖属性值
       saleAttrValue.isChecked = 1;
     },
-  },
+    // 表单元素修改产品个数
+    changeSkuNum($evnet){
+      // 用户输入进来的文本 * 1
+      let value = $event.target.value * 1;
+      if(isNaN(value) || value < 1){
+        // 非法情况 NaN或小于1
+        this.skuNum = 1;
+      } else {
+        // 小数点情况
+        this.skuNum = parseInt(value);
+      }
+    },
+    // 加入购物车路由跳转
+    async addShopCart(){
+      // 1：发请求--将产品加入到数据库（通知服务器）,判断加入购物车成功还是失败，进行相应的操作（下面这个方法加入async，返回一定是个Promise，要么成功，要么失败）
+      // 调用仓库的
+      try {
+        let result = await this.$store.dispatch('addOrUpdataShopCart',{skuId:this.$route.params.skuid, skuNum:this.skuNum})
+      } catch (error) {
+        alert(error.message);
+      }
+
+      // 2：存储成功，进行路由跳转（带参数）
+      // 3：存储失败，给用户提示
+    }
+  },  
 };
 </script>
 

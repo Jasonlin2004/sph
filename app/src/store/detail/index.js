@@ -1,4 +1,4 @@
-import { reqGoodsInfo } from "@/api";
+import { reqGoodsInfo,reqAddOrUpdataShopCart } from "@/api";
 
 const state = {
   goodInfo: {}
@@ -16,6 +16,18 @@ const actions = {
     const result = await reqGoodsInfo(skuId);
     if (result.code == 200) {
       commit('GETGOODSINFO', result.data);
+    }
+  },
+  // 将产品添加到购物车
+  async addOrUpdataShopCart({commit},{skuId,skuNum}){
+    const result = await reqAddOrUpdataShopCart(skuId,skuNum);
+    // 当前这个函数如果执行返回Promise
+    // 代表服务器加入购物车成功
+    if(result.code==200){
+      return 'ok'
+    } else {
+      // 代表加入购物车失败
+      return Promise.reject(new Error('faile'));
     }
   }
 };
