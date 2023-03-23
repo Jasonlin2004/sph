@@ -410,13 +410,16 @@ export default {
       // 1：发请求--将产品加入到数据库（通知服务器）,判断加入购物车成功还是失败，进行相应的操作（下面这个方法加入async，返回一定是个Promise，要么成功，要么失败）
       // 调用仓库的
       try {
-        let result = await this.$store.dispatch('addOrUpdataShopCart',{skuId:this.$route.params.skuid, skuNum:this.skuNum})
+        await this.$store.dispatch('addOrUpdataShopCart',{skuId:this.$route.params.skuid, skuNum:this.skuNum})
+        // 2：进行路由跳转
+        // 3：在路由跳转的时候还需将产品信息带给下一级路由组件
+        // 可以使用下面这种手段跳转一级路由传递参数
+        // 简单数据skuNum通过query传递，产品信息比较复杂，skuInfo通过会话存储（会话结束，数据消失）
+        sessionStorage.setItem("SKUINFO",JSON.stringify(this.skuInfo))
+        this.$router.push({name:'addcartsuccess', query:{skuNum:this.skuNum}});
       } catch (error) {
         alert(error.message);
       }
-
-      // 2：存储成功，进行路由跳转（带参数）
-      // 3：存储失败，给用户提示
     }
   },  
 };

@@ -4,6 +4,9 @@ import axios from 'axios';
 import nProgress from 'nprogress';  // start：进度条开始；done：进度条结束
 // 进度条样式
 import 'nprogress/nprogress.css';
+// 引入仓库
+import store from "@/store";
+
 
 // 1、利用axios的方法create，创建一个axios的实例
 // 2、request就是axios，只不过可以稍微配置一下
@@ -17,6 +20,10 @@ const requests = axios.create({
 // 请求拦截器：发请求之前可以检测到，做一些事情
 requests.interceptors.request.use((config)=>{
   // config：配置对象，对象里面有个Header请求头，很重要
+  if(store.state.detail.uuid_token){
+    // 给请求头添加一个字段，和后台商量好
+    config.headers.userTempId = store.state.detail.uuid_token;
+  }
   nProgress.start();
   return config;
 })
