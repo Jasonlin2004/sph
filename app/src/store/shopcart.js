@@ -55,8 +55,7 @@ const actions = {
     state.cartList[0].cartInfoList.forEach((item) => {
       let promise = dispatch('updateCart', { skuId: item.skuId, isChecked });
       promiseAll.push(promise);
-    });
-    
+    }); 
     return Promise.all(promiseAll);
   }
 };
