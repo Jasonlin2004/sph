@@ -15,7 +15,7 @@
           <!-- 有用户名：已登录 -->
           <p v-else>
             <a>{{userName}}</a>
-            <a class="register">退出</a>
+            <a class="register" @click="logout">退出</a>
           </p>
         </div>
         <div class="typeList">
@@ -94,6 +94,19 @@ export default {
         const location = {name:'search',params:{keyword:this.keyword || undefined}};
         location.query = this.$route.query;
         this.$router.push(location);
+      }
+    },
+    // 退出登录
+    async logout(){
+      // 1：需要发请求通知服务器退出登录【清除 token】
+      // 2：清除项目当中的数据【userInfo，token】
+      try {
+        // 如果退出成功
+        await this.$store.dispatch("userLogout");
+        // 回到登录页
+        this.$router.replace("/home");
+      } catch (error) {
+        alert(error.message);
       }
     }
   },

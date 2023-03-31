@@ -25,8 +25,6 @@ export default {
   mounted() {
     // 派发action
     this.$store.dispatch("getFloorList");
-    // 获取用户信息，在首页展示
-    this.$store.dispatch("getUserInfo");
   },
   computed: {
     ...mapState({

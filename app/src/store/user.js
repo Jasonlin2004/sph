@@ -1,9 +1,10 @@
 // 登陆与注册模块
-import { reqGetCode,reqUserRegister,reqUserLogin,reqUserInfo } from '@/api';
+import { reqGetCode,reqUserRegister,reqUserLogin,reqUserInfo,reqLogout } from '@/api';
+import {setToken,getToken,removeToken} from "@/utils/token";
 
 const state = {
   code: "",  // 存放验证码
-  token: "", // 用户token
+  token: getToken(), // 用户token
   userInfo: {}
 };
 
@@ -16,6 +17,13 @@ const mutations = {
   },
   GETUSERINFO(state,userInfo){
     state.userInfo = userInfo || {};
+  },
+  // 清除本地数据
+  CLEAR(state){
+    // 把仓库相关用户信息清空，本地存储清空
+    state.token = "";
+    state.userInfo = {};
+    removeToken();
   }
 };
 
@@ -44,7 +52,8 @@ const actions = {
   async userLogin({commit},data){
     let result = await reqUserLogin(data);
     if(result.code == 200) {
-      commit("USERLOGIN",result.data.token);
+      commit("USERLOGIN",result.data.token); // 用户登录成功获取token
+      setToken(result.data.token); // vuex不能持久化存储数据，所以保存在本地储存（持久化存储）
       return "ok";
     } else {
       return Promise.reject(new Error('faile'));
@@ -55,6 +64,17 @@ const actions = {
     let result = await reqUserInfo();
     if(result.code==200){
       commit("GETUSERINFO",result.data);
+      return "ok";
+    } else {
+      return Promise.reject(new Error('faile'));
+    }
+  },
+  // 退出登录
+  async userLogout({commit}){
+    let result = await reqLogout(); // 只是向服务器发请求清除token，但本地用户信息也要清除
+    // actions 不能直接操作state！提交到mutations里修改state
+    if(result.code == 200) {
+      commit("CLEAR");
       return "ok";
     } else {
       return Promise.reject(new Error('faile'));
