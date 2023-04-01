@@ -47,3 +47,9 @@ export const reqUserInfo = () => requests({url:'/user/passport/auth/getUserInfo'
 
 // 退出登录 /api/user/passport/logout GET
 export const reqLogout = () => requests({url:'/user/passport/logout', method:'get'});
+
+// 获取用户地址信息 /api/user/userAddress/auth/findUserAddressList GET
+export const reqAddressInfo = () => requests({url:'/user/userAddress/auth/findUserAddressList', method:'get'});
+
+// 获取商品清单 /api/order/auth/trade GET
+export const reqOrderInfo = () => requests({url:'/order/auth/trade', method:'get'});

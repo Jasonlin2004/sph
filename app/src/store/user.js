@@ -79,7 +79,8 @@ const actions = {
     } else {
       return Promise.reject(new Error('faile'));
     }
-  }
+  },
+  //
 };
 
 const getters = {};
