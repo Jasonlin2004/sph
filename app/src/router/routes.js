@@ -7,6 +7,8 @@ import Detail from "@/pages/Detail";
 import AddCartSuccess from '@/pages/AddCartSuccess';
 import ShopCart from "@/pages/ShopCart";
 import Trade from "@/pages/Trade";
+import Pay from "@/pages/Pay";
+import PaySuccess from "@/pages/PaySuccess";
 
 // 路由配置信息
 export default[
@@ -34,6 +36,16 @@ export default[
   {
     path:'/shopcart',
     component:ShopCart,
+    meta:{showFooter:true}
+  },
+  {
+    path:'/pay',
+    component:Pay,
+    meta:{showFooter:true}
+  },
+  {
+    path:'/paysuccess',
+    component:PaySuccess,
     meta:{showFooter:true}
   },
   {

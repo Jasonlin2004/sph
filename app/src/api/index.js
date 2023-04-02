@@ -53,3 +53,12 @@ export const reqAddressInfo = () => requests({url:'/user/userAddress/auth/findUs
 
 // 获取商品清单 /api/order/auth/trade GET
 export const reqOrderInfo = () => requests({url:'/order/auth/trade', method:'get'});
+
+// 提交订单接口 /api/order/auth/submitOrder?tradeNo={tradeNo} POST
+export const reqSubmitOrder = (tradeNo,data) => requests({url:`/order/auth/submitOrder?tradeNo=${tradeNo}`, data, method:'post'})
+
+// 获取支付信息 /api/payment/weixin/createNative/{orderId} GET
+export const reqPayInfo = (orderId) => requests({url:`/payment/weixin/createNative/${orderId}`,method:'get'});
+
+// 获取支付订单状态 /api/payment/weixin/queryPayStatus/{orderId} GET
+export const reqPayStatus = (orderId) => requests({url:`/payment/weixin/queryPayStatus/${orderId}`,method:'get'})
