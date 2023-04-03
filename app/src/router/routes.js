@@ -9,6 +9,9 @@ import ShopCart from "@/pages/ShopCart";
 import Trade from "@/pages/Trade";
 import Pay from "@/pages/Pay";
 import PaySuccess from "@/pages/PaySuccess";
+import Center from "@/pages/Center";
+import MyOrder from "@/pages/Center/MyOrder";
+import GroupOrder from "@/pages/Center/GroupOrder";
 
 // 路由配置信息
 export default[
@@ -47,6 +50,21 @@ export default[
     path:'/paysuccess',
     component:PaySuccess,
     meta:{showFooter:true}
+  },
+  {
+    path:'/center',
+    component:Center,
+    meta:{showFooter:true},
+    children:[
+      {
+        path:'myorder',
+        component:MyOrder
+      },
+      {
+        path:'grouporder',
+        component:GroupOrder
+      },
+    ]
   },
   {
     path:'/trade',
