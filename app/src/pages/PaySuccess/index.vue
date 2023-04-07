@@ -20,10 +20,15 @@
 <script>
   export default {
     name: 'PaySuccess',
+    // 组件内守卫
+    beforeRouteEnter(to,from,next){
+      if(from.path=="/pay") next();
+      else next(false);
+    }  
   }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" scoped> 
   .paysuccess {
     margin: 20px auto;
     padding: 25px;

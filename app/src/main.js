@@ -23,6 +23,14 @@ import '@/mock/serve'; // mock当中serve.js需要执行一次
 import 'swiper/css/swiper.min.css';
 // 统一接口api文件夹里全部请求函数
 import * as API from '@/api'; // 统一引入
+import leon from "@/assets/leon.jpg";
+
+// 引入插件
+import VueLazyload from 'vue-lazyload';
+// 注册插件
+Vue.use(VueLazyload,{
+  loading: leon
+})
 
 Vue.config.productionTip = false;
 

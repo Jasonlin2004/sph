@@ -65,8 +65,14 @@ router.beforeEach(async (to,from,next)=>{
       }
     }
   } else {
-    // 未登录时
-    next();
+    // 未登录时：不能去交易、支付【pay|paysuccess】、个人中心、订单
+    // 去的不是以上路由可以放行
+    let toPath = to.path;
+    if(toPath.indexOf("/trade")!=-1 || toPath.indexOf("/pay")!=-1 || toPath.indexOf("/center")!=-1){
+      // 把未登录的时候想去的路由没有去成的信息，存储在地址栏中【路由】
+      next("/login?redirect="+toPath);
+    }
+    else next();
   }
 });
 
